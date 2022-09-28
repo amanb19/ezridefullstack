@@ -4,6 +4,8 @@ import { Routes, Route } from "react-router-dom"
 import React from 'react';
 import { BrowserRouter } from "react-router-dom";
 
+//checking git 
+
 //Navabar ,sidebar , header ,footer
 import NewNav from './components/navbar/NewNav';
 import SideNav from './components/sidenavbar/SideNav';
