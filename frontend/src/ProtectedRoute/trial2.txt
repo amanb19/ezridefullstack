@@ -1,0 +1,78 @@
+import "./App.css";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import HomeComponent from "./pages/HomeComponent";
+import AccountComponent from "./pages/AccountComponent";
+import CardsComponent from "./pages/CardsComponent";
+import ProtectedRoute from './ProtectedRoute';
+import useAuth from "./useAuth";
+
+function App() {
+  const [isAuth, login, logout] = useAuth(false)
+  return (
+    <div className="ui container">
+      <h2>Protected Routes Tutorial</h2>
+      <Router>
+        <ul>
+          <li>
+            <Link to="/">Home Page</Link>
+          </li>
+          <li>
+            <Link to="/accounts">Accounts (Protected)</Link>
+          </li>
+          <li>
+            <Link to="/cards">Cards (UnProtected)</Link>
+          </li>
+        </ul>
+        {isAuth ? (<><div className="ui message brown">You are logged in..</div><button className="ui button blue" onClick={logout}>Logout</button></>):(<><div className="ui message violet">You are logged out..</div><button className="ui button blue" onClick={login}>Login</button></>)}
+        <Switch>
+          <Route path="/" exact component={HomeComponent} />
+          <Route path="/cards" component={CardsComponent} />
+          <ProtectedRoute path="/accounts" component={AccountComponent} auth={ isAuth}/>
+        </Switch>
+      </Router>
+    </div>
+  );
+}
+
+export default App;
+
+------------------------------------------------------------------------------------------------------------
+
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
+
+const ProtectedRoute = ({ auth, component: Component, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={(props) => {
+        if (auth) return <Component {...props} />;
+        if (!auth)
+          return (
+            <Redirect to={{ path: "/", state: { from: props.location } }} />
+          );
+      }}
+    />
+  );
+};
+
+export default ProtectedRoute;
+
+---------------------------------------------------------------------------------------------------------------
+
+import { useState } from "react";
+
+export default function useAuth(initialValue) {
+  const [isAuth, setIsAuth] = useState(initialValue);
+  function login() {
+    setTimeout(() => {
+      setIsAuth(true);
+    }, 1000);
+  }
+  function logout() {
+    setTimeout(() => {
+      setIsAuth(false);
+    }, 1000);
+  }
+  return [isAuth, login, logout];
+}

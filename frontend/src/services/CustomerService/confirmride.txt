@@ -1,0 +1,162 @@
+
+import { useEffect,useState } from 'react';
+import { json, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { ButtonGroup, Card, Table } from 'react-bootstrap';
+
+
+export default function ConfirmRide(){
+
+    let navigate =useNavigate();
+    const [cust,setCustomer]=useState({});
+    const[driver,setDriver]= useState({});
+    const [rid,setRid]= useState('');
+
+    // useEffect(()=>{
+    //     let cust = JSON.parse(sessionStorage.getItem('user-info'))
+    //     setCustomer(cust)
+    //    },[])
+           
+
+    //payment 
+    
+    const email = cust.email;
+    
+    const subject = "JoinMyRide : OTP for Payment";
+    const random = Math.floor(100000 + Math.random() * 900000);
+    const body = "Dear User , You OTP for payment is "+random;
+    const [otp, setOtp] = useState('');
+
+
+    async function sendOtp (){
+        await axios.post("http://localhost:9050/driver/sendMail",{
+            email,
+            subject,
+            body
+        }).then(res=>console.log(res))
+    }
+
+    // const handleOtp = (e) =>{
+    //     setOtp(e.target.value);
+    // }
+
+    // const handleSubmit = (e) =>{
+    //     e.preventDefault();
+    //     if(otp==random){
+    //         console.warn("Correct Otp");
+    //         onPayment();
+    //     }else{
+    //         console.warn("Wrong Otp,Please try again");
+    //         console.log(otp);
+    //         navigate("/home")
+    //     }
+    // }
+
+    // function onPayment (){
+    //     alert("Inside on Payment");
+    // }
+
+
+  
+let driver1 = JSON.parse(sessionStorage.getItem('driver-info')).user.id
+
+    
+ useEffect(()=>{
+    // let driver =sessionStorage.getItem('driver');
+    // setDriver(driver);
+ 
+    let cust =JSON.parse(sessionStorage.getItem('user-info'))
+
+    let rid = JSON.parse(sessionStorage.getItem('rides'))
+    setRid(rid);
+
+
+
+},[])
+
+// const dname = driver.user.name;
+
+
+const bookride = ()=>{
+    axios.post(`http://localhost:9050/customer/bookride/${cust.cid}/${rid}`)
+    .then(res=>{console.log('posting data' ,res)
+    
+    .catch(err=> console.log(err))
+})
+
+};
+
+    return(
+      <div className='home'>
+
+      <div className="grid-container">
+    <div className="item1" >
+      
+    <h1>Driver Info </h1>
+    
+    <table cellPadding={10} className="cardtable">
+            <tr>
+                <td className='data'>Name-</td>
+                <td className='data'> {JSON.parse(sessionStorage.getItem('driver-info')).user.name} </td>
+            </tr>
+            <tr>
+                <td className='data'>Mobile NO-</td>
+                <td className='data'> {JSON.parse(sessionStorage.getItem('driver-info')).mobileNumber}  </td>
+            </tr>
+        </table>
+
+
+    {/* <table className = "table table-striped">
+                    <thead>
+                        <tr>
+
+                            <td> User Id</td>
+                            <td> User Name</td>
+                            <td> User Mobile No.</td>
+                            <td> User Email Id</td>
+                            <td> Role</td>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        {
+                            this.state.drivers.map(
+                                driver => 
+                                <tr key = {driver.uid}>
+                                     <td> {driver.uid}</td>   
+                                     <td> {driver.name}</td>   
+                                     <td> {driver.mobileNumber}</td>   
+                                     <td> {driver.email}</td>   
+                                     <td> {driver.role}</td>  
+                                    
+                                </tr>
+                            )
+                        }
+
+                    </tbody>
+                </table>
+           */}
+  </div>
+  <div className="vl"></div>
+  
+    <div className="item2">
+      <h1>Payment info</h1><br/>
+
+
+  
+      <button onClick={()=>{sendOtp();navigate("/customer/payment")}} > confirm </button>
+    {/* <Link to="/customer_login" className="btn btn-primary btn-lg btn-block ">Customer</Link><br/>
+    <p>or</p>
+    <Link to="/driver_login" className="btn btn-primary btn-lg">Driver</Link><br/><br/> */}
+  
+   
+    {/* <Link to="/about"><h3>Click here to know more</h3></Link>
+          */}
+         
+  </div>
+  </div>
+      
+       </div>
+    )
+}

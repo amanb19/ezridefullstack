@@ -1,0 +1,28 @@
+.Title {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    background-color: rgb(85, 200, 245);
+    color: #fff;
+    font-size: xx-large;
+  }
+
+  .h1{
+    
+    
+    align-items: baseline;
+    padding: 1em;
+    margin-bottom: 2em;
+    margin-left: 500px;
+    font-size: xx-large;
+  }
+
+  .logo{
+  position:unset;
+  margin: 20px;
+  justify-content: left;
+  border-radius: 5px;
+  height:100px;
+  /* margin-right: 850px; */
+  }
